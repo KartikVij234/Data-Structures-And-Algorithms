@@ -1,71 +1,66 @@
-#include<bits/stdc++.h>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-void merge(int a[], int low, int mid, int high) //time comp. O(n) ; space comp. O(n)
-{
-	int n1 = mid - low + 1;
-	int n2 = high - mid;
+void merge(vector<int>& arr, int low, int mid, int high) {
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
 
-	int left[n1];
-	int right[n2];
-	
-	for (int i = 0; i < n1; i++)
-	{
-		left[i] = a[low + i];
-	}
+    vector<int> left(n1);
+    vector<int> right(n2);
 
-	for (int i = 0; i < n2; i++)
-	{
-		right[i] = a[mid + 1 + i];
-	}
+    for (int i = 0; i < n1; i++) {
+        left[i] = arr[low + i];
+    }
 
-	int i = 0, j = 0, k = low;
+    for (int i = 0; i < n2; i++) {
+        right[i] = arr[mid + 1 + i];
+    }
 
-	while (i < n1 and j < n2)
-	{
-		if (left[i] <= right[j])
-		{
-			a[k] = left[i];
-			k++;
-			i++;
-		}
-		else
-		{
-			a[k] = right[j];
-			k++;
-			j++;
-		}
-	}
+    int i = 0, j = 0, k = low;
 
-	while (i < n1)
-	{
-		a[k] = left[i];
-		k++;
-		i++;
-	}
+    while (i < n1 && j < n2) {
+        if (left[i] <= right[j]) {
+            arr[k] = left[i];
+            i++;
+        } else {
+            arr[k] = right[j];
+            j++;
+        }
+        k++;
+    }
 
-	while (j < n2)
-	{
-		a[k] = right[j];
-		k++;
-		j++;
-	}
+    while (i < n1) {
+        arr[k] = left[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = right[j];
+        j++;
+        k++;
+    }
 }
 
-int main()
-{
-	int a[] = {1, 3, 5, 7, 2, 4, 6};
-	int n = sizeof(a) / sizeof(int);
+void mergeSort(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int mid = low + (high - low) / 2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid + 1, high);
+        merge(arr, low, mid, high);
+    }
+}
 
-	int low = 0;
-	int high = (n - 1);
-	int mid = (low + high) / 2;
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 2, 4, 6};
+    int n = arr.size();
 
-	merge(a, low, mid, high);
+    mergeSort(arr, 0, n - 1);
 
-	for (int i = 0; i < n; i++)
-	{
-		cout << a[i] << " ";
-	}
-	return 0;
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    return 0;
 }
